@@ -96,8 +96,8 @@ window.onload = function () {
         div.style.opacity = value;
     });
     controllerColor.onChange(function (value) {
-        // div.style.color = value;
-        below.style.color = value;
+        div.style.color = value;
+//         below.style.color = value;
 
     });
     controllerBackground.onChange(function (value) {
