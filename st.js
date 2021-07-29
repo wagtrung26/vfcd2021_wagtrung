@@ -2,7 +2,7 @@ var FizzyText = function () {
     this.message = 'Future';
     this.subtext = 'A series of inspirational, informative events and diverse creative experiences initiated by RMIT Vietnam';
     this.opacity = 0.8;
-    this.display = true;
+    this.displayLogo = true;
     this.explode = function () {
     };
     this.MainText = "#ff9966";
@@ -17,7 +17,11 @@ var FizzyText = function () {
 
     this.paper = "#efeedb";
     this.hidePaper = false;
+    this.hideBlock = false;
     this.vectorColor = "#efeedb";
+    this.vectorWidth = 0;
+
+    this.logoColor = "#333"
 
     this.SAVE_PNG = function() {
         saveSvgAsPng(document.getElementById("app"), 'pattern.png');
@@ -33,6 +37,7 @@ window.onload = function () {
     var div = document.querySelector("#head");
     var below = document.querySelector("#below");
     var sub = document.querySelector("#sub");
+    var log = document.querySelector("#log");
 
     var pattern = document.querySelector("#pattern");
     var bg = document.querySelector("#bg");
@@ -45,31 +50,39 @@ window.onload = function () {
     var controllerHidePaper = gui.add(text, 'hidePaper');
 
 
-
     // gui.add(text, 'explode');
 
     var f1 = gui.addFolder('Edit Text');
         var controllerText = f1.add(text, 'message');
-        var controllerSubText = f1.add(text, 'subtext');
+        var controllerColor = f1.addColor(text, 'MainText');
         var controllerFontSize = f1.add(text, 'fontSize', 16, 120);
         var controllerDecor = f1.add(text, 'textDecoration', ['none', 'underline', 'overline', 'line-through']);
         var controllerOpacity = f1.add(text, 'opacity', 0, 1);
-        var controllerColor = f1.addColor(text, 'MainText');
+
+        var controllerSubText = f1.add(text, 'subtext');
         var controllerBackground = f1.addColor(text, 'BlockText');
-        var controllerDisplay = f1.add(text, 'display');
+        var controllerHideBlock = f1.add(text, 'hideBlock');
+
+        
+
 
     var f2 = gui.addFolder('Pattern');
         var controllerColorVector = f2.addColor(text, 'vectorColor');
+        var controllerVectorWidth = f2.add(text, 'vectorWidth', 0, 120);
         var patternXController = f2.add(text, 'patternX', -1000, 1000);
         var patternYController = f2.add(text, 'patternY', -1000, 1000);
-        var patternWidthController = f2.add(text, 'patternScale', 300, 1000);
+        var patternWidthController = f2.add(text, 'patternScale', 0, 1000);
+    var controllerColorLogo = gui.addColor(text, 'logoColor');
+    var controllerDisplayLogo = gui.add(text, 'displayLogo');
+
+     
     
     gui.add(text, 'SAVE_PNG');
 
 
 
     // CONTROl
-        
+    var strokeColorr = '';
     patternXController.onChange(function (value) {
 
         pattern.setAttribute('x',  value);
@@ -96,8 +109,12 @@ window.onload = function () {
         div.style.opacity = value;
     });
     controllerColor.onChange(function (value) {
+        // div.style.color = value;
         div.style.color = value;
-//         below.style.color = value;
+
+    });
+    controllerColorLogo.onChange(function (value) {
+        log.style.fill = value;
 
     });
     controllerBackground.onChange(function (value) {
@@ -114,10 +131,12 @@ window.onload = function () {
 
     controllerColorVector.onChange(function (value) {
         vector.style.fill = value;
+        vector.style.stroke = value;
+
     });
 
-    controllerDisplay.onChange(function (value) {
-        div.style.display = this.display ? "block" : "none";
+    controllerDisplayLogo.onChange(function (value) {
+        log.style.display = this.display ? "block" : "none";
         this.display = !this.display;
     });
 
@@ -126,7 +145,15 @@ window.onload = function () {
         this.display = !this.display;
     });
 
+    controllerHideBlock.onChange(function (value) {
+        sub.style.display = this.display ? "block" : "none";
+        this.display = !this.display;
+    });
 
+
+    controllerVectorWidth.onChange(function (value) {
+        vector.style.strokeWidth = value + "px";
+    });
 
     controllerFontSize.onChange(function (value) {
         div.style.fontSize = value + "px";
